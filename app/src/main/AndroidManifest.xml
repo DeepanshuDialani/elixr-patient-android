@@ -40,7 +40,6 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-
         <service
             android:name=".ElixrInstanceIDListenerService"
             android:exported="false">
@@ -48,11 +47,14 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-
         <service
-            android:name="com.android.elixr.RegistrationIntentService"
+            android:name=".RegistrationIntentService"
             android:exported="false" />
 
+        <activity
+            android:name=".ReportDataActivity"
+            android:label="@string/title_activity_report_data"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

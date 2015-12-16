@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_id": "elixr-2811c",
-    "project_number": "13872126446",
-    "name": "Elixr"
+    "project_id": "elixr-health",
+    "project_number": "889169934331",
+    "name": "elixr-health"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:13872126446:android:bb409c577a70ba48",
+        "mobilesdk_app_id": "1:889169934331:android:bb409c577a70ba48",
         "client_id": "android:com.android.elixr",
         "client_type": 1,
         "android_client_info": {

@@ -26,11 +26,14 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.android.elixr.models.ReportData;
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.gson.Gson;
 
 public class ElixrGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "ElixrGcmListenerService";
+    public static final String REPORT_DATA_KEY = "ReportDataKey";
 
     /**
      * Called when message is received.
@@ -42,9 +45,11 @@ public class ElixrGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
+        Gson gson = new Gson();
+        String messageJson = data.getString("reportData");
+        ReportData reportData = gson.fromJson(messageJson, ReportData.class);
         Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
+        Log.d(TAG, "Message: " + reportData.getPatientName());
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.
@@ -64,7 +69,7 @@ public class ElixrGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message);
+        sendNotification(reportData);
         // [END_EXCLUDE]
     }
     // [END receive_message]
@@ -74,9 +79,10 @@ public class ElixrGcmListenerService extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message) {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void sendNotification(ReportData reportData) {
+        Intent intent = new Intent(this, ReportDataActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(REPORT_DATA_KEY, reportData);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
@@ -84,7 +90,7 @@ public class ElixrGcmListenerService extends GcmListenerService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(android.R.drawable.ic_menu_view)
                 .setContentTitle("GCM Message")
-                .setContentText(message)
+                .setContentText(reportData.getPatientName())
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
